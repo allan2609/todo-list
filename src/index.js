@@ -2,6 +2,7 @@ import Todo from "./Todo.js";
 import createTodo from "./createTodo.js";
 import Project from "./project.js";
 import createProject from "./createProject.js";
+import "./styles.css";
 
 const projects = [
   new Project("Sample project"),
