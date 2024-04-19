@@ -9,25 +9,39 @@
 </head>
 
 <body>
-  <span>
-    <label for="title" class="required">Title</label>
-    <input type="text" id="title" required>
+  <span class="header">
+    <h1>ToDo List</h1>
+    <div class="project-selector"></div>
   </span>
-  <span>
-    <label for="description" class="required">Description</label>
-    <input type="text" id="description" required>
-  </span>
-  <span>
-    <label for="due-date" class="required">Due date</label>
-    <input type="date" id="due-date" required>
-  </span>
-  <span>
-    <label for="priority" class="required">Priority</label>
-    <input type="text" id="priority" required>
-  </span>
-  <div class="project-selector"></div>
-  <button class="add-todo">Add item to project</button>
-  <p></p>
+  <div class="new-todo-container">
+    <button class="new">New ToDo</button>
+  </div>
+  <dialog id="dialog">
+    <form class="form">
+      <p>New ToDo</p>
+      <div class="form-items">
+        <span>
+          <label for="title" class="required">Title</label>
+          <input type="text" id="title" required>
+        </span>
+        <span>
+          <label for="description" class="required">Description</label>
+          <input type="text" id="description" required>
+        </span>
+        <span>
+          <label for="due-date" class="required">Due date</label>
+          <input type="date" id="due-date" required>
+        </span>
+        <span>
+          <label for="priority" class="required">Priority</label>
+          <input type="text" id="priority" required>
+        </span>
+      </div>
+    </form>
+    <button class="add">Add</button>
+    <button class="close">Close</button>
+  </dialog>
+  
   <span>
     <label for="project-name" class="required">New project</label>
     <input type="text" id="project-name" required>

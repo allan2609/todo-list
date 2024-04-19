@@ -19,7 +19,6 @@ function addToProject() {
   projects[activeProject].todos.push(
     createTodo(title.value, description.value, date.value, priority.value)
   );
-
   console.log(projects);
   title.value = "";
   description.value = "";
@@ -29,7 +28,6 @@ function addToProject() {
   showTodos();
 }
 
-document.querySelector(".add-todo").addEventListener("click", addToProject);
 document.querySelector(".add-project").addEventListener("click", createNewProject);
 
 function createNewProject() {
@@ -82,6 +80,11 @@ function createProjectSelector() {
   projectSelector.appendChild(selector);
 }
 
+document.querySelector(".add").addEventListener("click", addToProject);
+document.querySelector(".close").addEventListener("click", () => {
+  dialog.close();
+});
+
 function showTodos() {
   const todoList = document.querySelector(".todo-list");
   while (todoList.hasChildNodes()) {
@@ -116,3 +119,7 @@ function showTodos() {
     todoList.appendChild(item);
   });
 }
+
+document.querySelector(".new").addEventListener("click", () => {
+  dialog.showModal();
+});
