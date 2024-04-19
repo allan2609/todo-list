@@ -13,10 +13,13 @@
     <h1>ToDo List</h1>
     <div class="project-selector"></div>
   </span>
-  <div class="new-todo-container">
-    <button class="new">New ToDo</button>
-  </div>
-  <dialog id="dialog">
+  
+  <span class="new-item-container">
+    <button class="new-todo">New ToDo</button>
+    <button class="new-project">New Project</button>
+  </span>
+  
+  <dialog id="todo-dialog">
     <form class="form">
       <p>New ToDo</p>
       <div class="form-items">
@@ -38,19 +41,29 @@
         </span>
       </div>
     </form>
-    <button class="add">Add</button>
-    <button class="close">Close</button>
+    <button class="add-todo">Add</button>
+    <button class="close-todo-dialog">Close</button>
   </dialog>
   
-  <span>
-    <label for="project-name" class="required">New project</label>
-    <input type="text" id="project-name" required>
-  </span>
-  <button class="add-project">Create new project</button>
+  <dialog id="project-dialog">
+    <form class="form">
+      <p>New Project</p>
+      <div class="form-items">
+        <span>
+          <label for="title" class="required">Project name</label>
+          <input type="text" id="project-name" required>
+        </span>
+      </div>
+    </form>
+    <button class="add-project">Create</button>
+    <button class="close-project-dialog">Close</button>
+  </dialog>
+  
   <p>Current projects:</p>
   <div class="project-list"></div>
   <p>Todos from current project:</p>
-  <div class="todo-list"></div>  
+  <div class="todo-list"></div>
+  
 </body>
 
 </html>

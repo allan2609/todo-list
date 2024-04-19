@@ -80,9 +80,14 @@ function createProjectSelector() {
   projectSelector.appendChild(selector);
 }
 
-document.querySelector(".add").addEventListener("click", addToProject);
-document.querySelector(".close").addEventListener("click", () => {
-  dialog.close();
+document.querySelector(".add-todo").addEventListener("click", addToProject);
+document.querySelector(".close-todo-dialog").addEventListener("click", () => {
+  todoDialog.close();
+});
+
+document.querySelector(".add-project").addEventListener("click", addToProject);
+document.querySelector(".close-project-dialog").addEventListener("click", () => {
+  projectDialog.close();
 });
 
 function showTodos() {
@@ -120,6 +125,13 @@ function showTodos() {
   });
 }
 
-document.querySelector(".new").addEventListener("click", () => {
-  dialog.showModal();
+const todoDialog = document.querySelector("#todo-dialog");
+const projectDialog = document.querySelector("#project-dialog");
+
+document.querySelector(".new-todo").addEventListener("click", () => {
+  todoDialog.showModal();
+});
+
+document.querySelector(".new-project").addEventListener("click", () => {
+  projectDialog.showModal();
 });
