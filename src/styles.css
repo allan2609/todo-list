@@ -2,3 +2,12 @@ body {
   display: flex;
   flex-direction: column;
 }
+
+.todo-item {
+  display: grid;
+  grid-template-columns: 6fr 2fr 1fr 1fr;
+}
+
+.edit svg, .remove svg {
+  max-height: 1.2rem;
+}
