@@ -28,8 +28,6 @@ function addToProject() {
   showTodos();
 }
 
-document.querySelector(".add-project").addEventListener("click", createNewProject);
-
 function createNewProject() {
   const projectName = document.querySelector("#project-name");
   projects.push(
@@ -41,7 +39,7 @@ function createNewProject() {
 }
 
 function showProjects() {
-  const projectList = document.querySelector(".project-list");
+  /*const projectList = document.querySelector(".project-list");
   while (projectList.hasChildNodes()) {
     projectList.removeChild(projectList.firstChild);
   }
@@ -50,7 +48,7 @@ function showProjects() {
     item.className = "project-item";
     item.textContent = project.projectName;
     projectList.appendChild(item);
-  });
+  });*/
   createProjectSelector();
 }
 
@@ -85,7 +83,7 @@ document.querySelector(".close-todo-dialog").addEventListener("click", () => {
   todoDialog.close();
 });
 
-document.querySelector(".add-project").addEventListener("click", addToProject);
+document.querySelector(".add-project").addEventListener("click", createNewProject);
 document.querySelector(".close-project-dialog").addEventListener("click", () => {
   projectDialog.close();
 });
