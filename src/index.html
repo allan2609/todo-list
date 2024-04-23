@@ -9,60 +9,75 @@
 </head>
 
 <body>
-  
+
   <span class="header">
-    <h1>ToDo List</h1>
-    <div class="project-selector"></div>
-  </span>
-  
-  <span class="new-item-container">
-    <button class="new-todo">New ToDo</button>
+  <h1>ToDo List</h1>
+  <div class="project-selector"></div>
+</span>
+
+<span class="new-item-container">
+  <button class="new-todo">New ToDo</button>
+  <div class="project-buttons">
     <button class="new-project">New Project</button>
-  </span>
-  
-  <dialog id="todo-dialog">
-    <form class="form">
-      <p>New ToDo</p>
-      <div class="form-items">
-        <span>
-          <label for="title" class="required">Title</label>
-          <input type="text" id="title" required>
-        </span>
-        <span>
-          <label for="description" class="required">Description</label>
-          <input type="text" id="description" required>
-        </span>
-        <span>
-          <label for="due-date" class="required">Due date</label>
-          <input type="date" id="due-date" required>
-        </span>
-        <span>
-          <label for="priority" class="required">Priority</label>
-          <input type="text" id="priority" required>
-        </span>
-      </div>
-    </form>
-    <button class="add-todo">Add</button>
-    <button class="close-todo-dialog">Close</button>
-  </dialog>
-  
-  <dialog id="project-dialog">
-    <form class="form">
-      <p>New Project</p>
-      <div class="form-items">
-        <span>
-          <label for="title" class="required">Project name</label>
-          <input type="text" id="project-name" required>
-        </span>
-      </div>
-    </form>
-    <button class="add-project">Create</button>
-    <button class="close-project-dialog">Close</button>
-  </dialog>
-  
-  <p></p>
-  
-  <div class="todo-list"></div>  
+    <button class="remove-project">Remove Project</button>
+  </div>
+</span>
+
+<dialog id="todo-dialog">
+  <form class="form">
+    <p>New ToDo</p>
+    <div class="form-items">
+      <span>
+        <label for="title" class="required">Title</label>
+        <input type="text" id="title" required>
+      </span>
+      <span>
+        <label for="description" class="required">Description</label>
+        <input type="text" id="description" required>
+      </span>
+      <span>
+        <label for="due-date" class="required">Due date</label>
+        <input type="date" id="due-date" required>
+      </span>
+      <span>
+        <label for="priority" class="required">Priority</label>
+        <select id="priority">
+          <option value="low">Low</option>
+          <option value="medium" selected="selected">Medium</option>
+          <option value="high">High</option>
+        </select>
+      </span>
+    </div>
+  </form>
+  <button class="add-todo">Add</button>
+  <button class="close-todo-dialog">Close</button>
+</dialog>
+
+<dialog id="project-dialog">
+  <form class="form">
+    <p>New Project</p>
+    <div class="form-items">
+      <span>
+        <label for="title" class="required">Project name</label>
+        <input type="text" id="project-name" required>
+      </span>
+    </div>
+  </form>
+  <button class="add-project">Create</button>
+  <button class="close-project-dialog">Close</button>
+</dialog>
+
+<dialog id="remove-project-dialog">
+  <form class="form">
+    <p>Are you sure you want to permanently remove this project?</p>
+  </form>
+  <button class="remove-project-permanently">Yes</button>
+  <button class="close-project-remove-dialog">Cancel</button>
+</dialog>
+
+<p></p>
+
+<div class="todo-list"></div> 
   
 </body>
 
