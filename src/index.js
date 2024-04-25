@@ -1,4 +1,3 @@
-import Todo from "./Todo.js";
 import createTodo from "./createTodo.js";
 import Project from "./project.js";
 import createProject from "./createProject.js";
@@ -8,9 +7,13 @@ const projects = [
   new Project("Sample project"),
 ];
 
+const todoDialog = document.querySelector("#todo-dialog");
+const projectDialog = document.querySelector("#project-dialog");
+const removeProjectDialog = document.querySelector("#remove-project-dialog");
+
 let activeProject = 0;
 
-function addToProject() {
+function addTodoToProject() {
   const title = document.querySelector("#title");
   const description = document.querySelector("#description");
   const date = document.querySelector("#due-date");
@@ -19,7 +22,7 @@ function addToProject() {
   projects[activeProject].todos.push(
     createTodo(title.value, description.value, date.value, priority.value)
   );
-  console.log(projects);
+
   title.value = "";
   description.value = "";
   date.value = "";
@@ -29,35 +32,21 @@ function addToProject() {
   todoDialog.close();
 }
 
-function createNewProject() {
+function addProjectToProjects() {
   const projectName = document.querySelector("#project-name");
   projects.push(
     createProject(projectName.value)
   );
-  console.log(projects);
-  showProjects();
+  activeProject = projects.length -1;
+  document.querySelector("select").value = activeProject;
+  createProjectSelector();
+  showTodos();
   projectDialog.close();
   projectName.value = "";
   if (projects.length != 0) {
     document.querySelector(".new-todo").disabled = false;
   }
 }
-
-function showProjects() {
-  /*const projectList = document.querySelector(".project-list");
-  while (projectList.hasChildNodes()) {
-    projectList.removeChild(projectList.firstChild);
-  }
-  projects.forEach(project => { 
-    const item = document.createElement("p");
-    item.className = "project-item";
-    item.textContent = project.projectName;
-    projectList.appendChild(item);
-  });*/
-  createProjectSelector();
-}
-
-showProjects();
 
 function createProjectSelector() {
   const projectSelector = document.querySelector(".project-selector");
@@ -74,6 +63,8 @@ function createProjectSelector() {
     option.value = i;
     selector.appendChild(option);
   }
+
+  selector.value = activeProject;
   
   selector.addEventListener("change", function() {
     activeProject = this.value;
@@ -83,29 +74,7 @@ function createProjectSelector() {
   projectSelector.appendChild(selector);
 }
 
-document.querySelector(".add-todo").addEventListener("click", () => {
-  if (validateTodoForm()) {
-    addToProject();
-  }
-});
-  
-document.querySelector(".close-todo-dialog").addEventListener("click", () => {
-  todoDialog.close();
-});
-
-document.querySelector(".add-project").addEventListener("click", () => {
-  if (validateProjectForm()) {
-    createNewProject();
-  }
-});
-  
-document.querySelector(".close-project-dialog").addEventListener("click", () => {
-  projectDialog.close();
-});
-
-document.querySelector(".close-project-remove-dialog").addEventListener("click", () => {
-  removeProjectDialog.close();
-});
+createProjectSelector();
 
 function showTodos() {
   const todoList = document.querySelector(".todo-list");
@@ -146,22 +115,6 @@ function showTodos() {
   }
 }
 
-const todoDialog = document.querySelector("#todo-dialog");
-const projectDialog = document.querySelector("#project-dialog");
-const removeProjectDialog = document.querySelector("#remove-project-dialog");
-
-document.querySelector(".new-todo").addEventListener("click", () => {
-  todoDialog.showModal();
-});
-
-document.querySelector(".new-project").addEventListener("click", () => {
-  projectDialog.showModal();
-});
-
-document.querySelector(".remove-project").addEventListener("click", () => {
-  removeProjectDialog.showModal();
-});
-
 function removeTodo(event) {
   const targetTodo = event.target.closest(".todo-item").dataset.itemID;
   const index = projects[activeProject].todos.findIndex(todo => todo.id == targetTodo);
@@ -169,11 +122,61 @@ function removeTodo(event) {
   showTodos();
 };
 
+document.querySelector(".new-todo").addEventListener("click", () => {
+  todoDialog.showModal();
+});
+
+function removeCurrentProject() {
+  projects.splice(activeProject, 1);
+  removeProjectDialog.close();
+  if (activeProject > 0) {
+    activeProject -= 1;
+  }
+  console.log("removing project. active project becomes: " + activeProject);
+  createProjectSelector();
+  showTodos();
+  if (projects.length == 0) {
+    document.querySelector(".new-todo").disabled = true;
+  }
+}
+
+document.querySelector(".add-todo").addEventListener("click", () => {
+  if (validateTodoForm()) {
+    addTodoToProject();
+  }
+});
+  
+document.querySelector(".close-todo-dialog").addEventListener("click", () => {
+  todoDialog.close();
+});
+
+document.querySelector(".new-project").addEventListener("click", () => {
+  projectDialog.showModal();
+});
+
+document.querySelector(".add-project").addEventListener("click", () => {
+  if (validateProjectForm()) {
+    addProjectToProjects();
+  }
+});
+  
+document.querySelector(".close-project-dialog").addEventListener("click", () => {
+  projectDialog.close();
+});
+
+document.querySelector(".remove-project").addEventListener("click", () => {
+  removeProjectDialog.showModal();
+});
+
+document.querySelector(".remove-project-permanently").addEventListener("click", removeCurrentProject);
+
+document.querySelector(".close-project-remove-dialog").addEventListener("click", () => {
+  removeProjectDialog.close();
+});
+
 function validateTodoForm() {
   const title = document.querySelector("#title");
   const description = document.querySelector("#description");
-  const date = document.querySelector("#due-date");
-  
   if (title.value.length < 3) {
     alert("Title must be filled out");
     return false;
@@ -190,7 +193,7 @@ function validateTodoForm() {
 
 function validateProjectForm() {
   const name = document.querySelector("#project-name");
-  if (name.value.length < 3) {
+  if (name.value.length < 1) {
     alert("Project name must be filled out");
     return false;
   } else if (name.value.length > 30) {
@@ -198,21 +201,5 @@ function validateProjectForm() {
     return false;
   } else {
     return true;
-  }
-}
-
-document.querySelector(".remove-project-permanently").addEventListener("click", removeCurrentProject);
-
-function removeCurrentProject() {
-  projects.splice(activeProject, 1);
-  removeProjectDialog.close();
-  createProjectSelector();
-  if (activeProject > 0) {
-    activeProject -= 1;
-  }
-  console.log("removing project. active project becomes: " + activeProject);
-  showTodos();
-  if (projects.length == 0) {
-    document.querySelector(".new-todo").disabled = true;
   }
 }
