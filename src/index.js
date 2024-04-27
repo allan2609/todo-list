@@ -1,3 +1,4 @@
+import Todo from "./Todo.js";
 import createTodo from "./createTodo.js";
 import Project from "./project.js";
 import createProject from "./createProject.js";
@@ -8,6 +9,7 @@ const projects = [
 ];
 
 const todoDialog = document.querySelector("#todo-dialog");
+const editTodoDialog = document.querySelector("#edit-todo-dialog");
 const projectDialog = document.querySelector("#project-dialog");
 const removeProjectDialog = document.querySelector("#remove-project-dialog");
 
@@ -49,10 +51,10 @@ function addProjectToProjects() {
 }
 
 function createProjectSelector() {
-  const projectSelector = document.querySelector(".project-selector");
+  const projectSelectorContainer = document.querySelector(".project-selector");
   
-  while (projectSelector.hasChildNodes()) {
-    projectSelector.removeChild(projectSelector.firstChild);
+  while (projectSelectorContainer.hasChildNodes()) {
+    projectSelectorContainer.removeChild(projectSelectorContainer.firstChild);
   }
   
   const selector = document.createElement("select");
@@ -71,7 +73,7 @@ function createProjectSelector() {
     showTodos();
   });
   
-  projectSelector.appendChild(selector);
+  projectSelectorContainer.appendChild(selector);
 }
 
 createProjectSelector();
@@ -90,7 +92,23 @@ function showTodos() {
       const title = document.createElement("div");
       title.className = "title";
       title.textContent = projects[activeProject].todos[i].title;
-
+      
+      item.addEventListener("mouseenter", () => {
+        if (projects[activeProject].todos[i].description.length > 0) {
+          document.querySelector(".hidden-description").textContent = projects[activeProject].todos[i].description;
+          document.querySelector(".hidden-description").style.display = "block";
+          document.querySelector(".hidden-description").style.visibility = "visible";
+          document.querySelector(".hidden-description").style.top = title.offsetTop + 12 + "px";
+          document.querySelector(".hidden-description").style.left = title.offsetLeft + "px";
+        }
+      });
+      
+      item.addEventListener("mouseleave", () => {
+        document.querySelector(".hidden-description").textContent = "";
+        document.querySelector(".hidden-description").style.display = "none";
+        document.querySelector(".hidden-description").style.visibility = "hidden";
+      });
+      
       const date = document.createElement("div");
       date.className = "date";
       date.textContent = projects[activeProject].todos[i].dueDate;
@@ -99,6 +117,7 @@ function showTodos() {
       const editIcon = '<svg viewBox="0 0 24 24"><path d="M20.71,7.04C21.1,6.65 21.1,6 20.71,5.63L18.37,3.29C18,2.9 17.35,2.9 16.96,3.29L15.12,5.12L18.87,8.87M3,17.25V21H6.75L17.81,9.93L14.06,6.18L3,17.25Z" /></svg>';
       edit.className = "edit";
       edit.innerHTML = editIcon;
+      edit.addEventListener("click", e => editTodo(e));
 
       const remove = document.createElement("div");
       const removeIcon = '<svg viewBox="0 0 24 24"><path d="M19,4H15.5L14.5,3H9.5L8.5,4H5V6H19M6,19A2,2 0 0,0 8,21H16A2,2 0 0,0 18,19V7H6V19Z" /></svg>';
@@ -115,6 +134,36 @@ function showTodos() {
   }
 }
 
+function editTodo(event) {
+  const targetTodo = event.target.closest(".todo-item").dataset.itemID;
+  const index = projects[activeProject].todos.findIndex(todo => todo.id == targetTodo);
+  
+  document.querySelector("#edit-title").value = projects[activeProject].todos[index].title;
+  document.querySelector("#edit-description").value = projects[activeProject].todos[index].description;
+  document.querySelector("#edit-due-date").value = projects[activeProject].todos[index].dueDate;
+  document.querySelector("#edit-priority").value = projects[activeProject].todos[index].priority;
+  
+  editTodoDialog.showModal();
+
+  document.querySelector(".update-todo").addEventListener("click", function() {
+    updateTodo(index);
+    const oldButton = document.querySelector(".update-todo")
+    const newButton = oldButton.cloneNode(true);
+    oldButton.parentNode.replaceChild(newButton, oldButton); //without this eventlistener starts running multiple times!?
+  });
+}
+
+function updateTodo(todo) {
+  if (validateEditForm()) {
+    projects[activeProject].todos[todo].title = document.querySelector("#edit-title").value;
+    projects[activeProject].todos[todo].description = document.querySelector("#edit-description").value;
+    projects[activeProject].todos[todo].dueDate = document.querySelector("#edit-due-date").value;
+    projects[activeProject].todos[todo].priority = document.querySelector("#edit-priority").value;
+    showTodos();
+    editTodoDialog.close();
+  }
+}
+
 function removeTodo(event) {
   const targetTodo = event.target.closest(".todo-item").dataset.itemID;
   const index = projects[activeProject].todos.findIndex(todo => todo.id == targetTodo);
@@ -122,23 +171,22 @@ function removeTodo(event) {
   showTodos();
 };
 
-document.querySelector(".new-todo").addEventListener("click", () => {
-  todoDialog.showModal();
-});
-
 function removeCurrentProject() {
   projects.splice(activeProject, 1);
   removeProjectDialog.close();
   if (activeProject > 0) {
     activeProject -= 1;
   }
-  console.log("removing project. active project becomes: " + activeProject);
   createProjectSelector();
   showTodos();
   if (projects.length == 0) {
     document.querySelector(".new-todo").disabled = true;
   }
 }
+
+document.querySelector(".new-todo").addEventListener("click", () => {
+  todoDialog.showModal();
+});
 
 document.querySelector(".add-todo").addEventListener("click", () => {
   if (validateTodoForm()) {
@@ -148,6 +196,10 @@ document.querySelector(".add-todo").addEventListener("click", () => {
   
 document.querySelector(".close-todo-dialog").addEventListener("click", () => {
   todoDialog.close();
+});
+
+document.querySelector(".close-edit-todo-dialog").addEventListener("click", () => {
+  editTodoDialog.close();
 });
 
 document.querySelector(".new-project").addEventListener("click", () => {
@@ -161,6 +213,8 @@ document.querySelector(".add-project").addEventListener("click", () => {
 });
   
 document.querySelector(".close-project-dialog").addEventListener("click", () => {
+  document.querySelector("#project-name").value = "";
+  document.querySelector("#project-name").classList.remove("invalid");
   projectDialog.close();
 });
 
@@ -177,6 +231,23 @@ document.querySelector(".close-project-remove-dialog").addEventListener("click",
 function validateTodoForm() {
   const title = document.querySelector("#title");
   const description = document.querySelector("#description");
+  if (title.value.length < 3) {
+    document.querySelector("#title").focus();
+    return false;
+  } else if (title.value.length > 30) {
+    document.querySelector("#title").focus();
+    return false;
+  } else if (description.value.length > 100) {
+    document.querySelector("#description").focus();
+    return false;
+  } else {
+    return true;
+  }
+}
+
+function validateEditForm() {
+  const title = document.querySelector("#edit-title");
+  const description = document.querySelector("#edit-description");
   if (title.value.length < 3) {
     alert("Title must be filled out");
     return false;
@@ -203,3 +274,35 @@ function validateProjectForm() {
     return true;
   }
 }
+
+document.querySelector("#title").addEventListener("input", () => {
+  if (document.querySelector("#title").value.length < 3 || document.querySelector("#title").value.length > 30) {
+    document.querySelector("#title").classList.add("invalid");
+  } else {
+    document.querySelector("#title").classList.remove("invalid");
+  }
+});
+
+document.querySelector("#edit-title").addEventListener("input", () => {
+  if (document.querySelector("#edit-title").value.length < 3 || document.querySelector("#edit-title").value.length > 30) {
+    document.querySelector("#edit-title").classList.add("invalid");
+  } else {
+    document.querySelector("#edit-title").classList.remove("invalid");
+  }
+});
+
+document.querySelector("#description").addEventListener("input", () => {
+  if (document.querySelector("#description").value.length > 100) {
+    document.querySelector("#description").classList.add("invalid");
+  } else {
+    document.querySelector("#description").classList.remove("invalid");
+  }
+});
+
+document.querySelector("#project-name").addEventListener("input", () => {
+  if ((document.querySelector("#project-name").value.length < 1 || document.querySelector("#project-name").value.length > 30)) {
+    document.querySelector("#project-name").classList.add("invalid");
+  } else {
+    document.querySelector("#project-name").classList.remove("invalid");
+  }
+});
