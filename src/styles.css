@@ -188,6 +188,21 @@ input.invalid:focus {
   border-radius: 0.5rem;
 }
 
+.low-priority {
+  border-left: 1px solid lightgreen;
+  box-shadow: 1px 0px 3px 3px rgba(82, 209, 88, 0.2);
+}
+
+.medium-priority {
+  border-left: 1px solid yellow;
+  box-shadow: 1px 0px 3px 3px rgba(252, 250, 101, 0.2);
+}
+
+.high-priority {
+  border: 1px solid pink;
+  box-shadow: 1px 0px 3px 3px rgba(168, 50, 50, 0.2);
+}
+
 .edit svg, .remove svg {
   height: 1.1rem;
 }
