@@ -99,7 +99,7 @@ function showTodos() {
       title.className = "title";
       title.textContent = projects[activeProject].todos[i].title;
       
-      /*item.addEventListener("mouseenter", () => {
+      item.addEventListener("mouseenter", () => {
         if (projects[activeProject].todos[i].description.length > 0 && projects[activeProject].todos[i].description != undefined) {
           document.querySelector(".hidden-description").textContent = projects[activeProject].todos[i].description;
           document.querySelector(".hidden-description").style.display = "block";
@@ -113,7 +113,7 @@ function showTodos() {
         document.querySelector(".hidden-description").textContent = "";
         document.querySelector(".hidden-description").style.display = "none";
         document.querySelector(".hidden-description").style.visibility = "hidden";
-      });*/
+      });
       
       const date = document.createElement("div");
       date.className = "date";
