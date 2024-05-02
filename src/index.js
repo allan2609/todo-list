@@ -1,4 +1,3 @@
-import Todo from "./Todo.js";
 import createTodo from "./createTodo.js";
 import Project from "./project.js";
 import createProject from "./createProject.js";
