@@ -43,6 +43,7 @@ function addProjectToProjects() {
   document.querySelector("select").value = activeProject;
   createProjectSelector();
   showTodos();
+  localStorage.setItem('projects', JSON.stringify(projects));
   projectDialog.close();
   projectName.value = "";
   if (projects.length != 0) {
@@ -51,6 +52,7 @@ function addProjectToProjects() {
 }
 
 function createProjectSelector() {
+
   const projectSelectorContainer = document.querySelector(".project-selector");
   
   while (projectSelectorContainer.hasChildNodes()) {
@@ -327,3 +329,21 @@ document.querySelector("#project-name").addEventListener("input", () => {
     document.querySelector("#project-name").classList.remove("invalid");
   }
 });
+
+function retrieveProjects(localStorage) {
+  console.log("retrieving from storage");
+  let parsed = JSON.parse(localStorage);
+  console.log("parsed from storage: " + parsed[0].projectName);
+  let newProjects = [];
+  parsed.forEach((project) =>{
+    let newProject = createProject(project.projectName);
+    let todos = project.todos;
+    for (let i = 0; i < todos.length; i++) {
+      let todo = todos[i];
+      project.todos[i] = createTodo({title: todo.title, description: todo.description, dueDate: todo.dueDate, priority: todo.priority});
+    }
+    newProject.todos = todos;
+    newProjects.push(newProject);
+  });
+  return newProjects;
+}
