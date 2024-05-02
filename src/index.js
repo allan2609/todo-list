@@ -217,6 +217,12 @@ document.querySelector(".add-todo").addEventListener("click", () => {
 });
   
 document.querySelector(".close-todo-dialog").addEventListener("click", () => {
+  document.querySelector("#title").value = "";
+  document.querySelector("#title").classList.remove("invalid");
+  document.querySelector("#description").value = "";
+  document.querySelector("#description").classList.remove("invalid");
+  document.querySelector("#due-date").value = "";
+  document.querySelector("#priority").value = "medium";
   todoDialog.close();
 });
 
