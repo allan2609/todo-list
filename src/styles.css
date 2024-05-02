@@ -38,7 +38,7 @@ body {
 dialog {
   width: min(34rem, 95%);
   padding: 2rem;
-  border: 2px solid black;
+  border: none;
   border-radius: 0.5rem;
   box-shadow: 1px 0px 4px 4px rgba(0, 0, 0, 0.2);
 }
