@@ -24,6 +24,8 @@ function addTodoToProject() {
     createTodo(title.value, description.value, date.value, priority.value)
   );
 
+  localStorage.setItem("projects", JSON.stringify(projects));
+
   title.value = "";
   description.value = "";
   date.value = "";
@@ -42,7 +44,7 @@ function addProjectToProjects() {
   document.querySelector("select").value = activeProject;
   createProjectSelector();
   showTodos();
-  localStorage.setItem('projects', JSON.stringify(projects));
+  localStorage.setItem("projects", JSON.stringify(projects));
   projectDialog.close();
   projectName.value = "";
   if (projects.length != 0) {
@@ -78,6 +80,7 @@ function createProjectSelector() {
 }
 
 createProjectSelector();
+showTodos();
 
 function showTodos() {
   const todoList = document.querySelector(".todo-list");
@@ -94,8 +97,8 @@ function showTodos() {
       title.className = "title";
       title.textContent = projects[activeProject].todos[i].title;
       
-      item.addEventListener("mouseenter", () => {
-        if (projects[activeProject].todos[i].description.length > 0) {
+      /*item.addEventListener("mouseenter", () => {
+        if (projects[activeProject].todos[i].description.length > 0 && projects[activeProject].todos[i].description != undefined) {
           document.querySelector(".hidden-description").textContent = projects[activeProject].todos[i].description;
           document.querySelector(".hidden-description").style.display = "block";
           document.querySelector(".hidden-description").style.visibility = "visible";
@@ -108,7 +111,7 @@ function showTodos() {
         document.querySelector(".hidden-description").textContent = "";
         document.querySelector(".hidden-description").style.display = "none";
         document.querySelector(".hidden-description").style.visibility = "hidden";
-      });
+      });*/
       
       const date = document.createElement("div");
       date.className = "date";
@@ -171,6 +174,7 @@ function updateTodo(todo) {
     projects[activeProject].todos[todo].dueDate = document.querySelector("#edit-due-date").value;
     projects[activeProject].todos[todo].priority = document.querySelector("#edit-priority").value;
     showTodos();
+    localStorage.setItem("projects", JSON.stringify(projects));
     editTodoDialog.close();
   }
 }
@@ -180,6 +184,7 @@ function removeTodo(event) {
   const index = projects[activeProject].todos.findIndex(todo => todo.id == targetTodo);
   projects[activeProject].todos.splice(index, 1);
   showTodos();
+  localStorage.setItem("projects", JSON.stringify(projects));
   document.querySelector(".hidden-description").textContent = "";
   document.querySelector(".hidden-description").style.display = "none";
   document.querySelector(".hidden-description").style.visibility = "hidden";
@@ -192,6 +197,7 @@ function removeCurrentProject() {
     activeProject -= 1;
   }
   createProjectSelector();
+  localStorage.setItem("projects", JSON.stringify(projects));
   showTodos();
   if (projects.length == 0) {
     document.querySelector(".new-todo").disabled = true;
@@ -330,19 +336,17 @@ document.querySelector("#project-name").addEventListener("input", () => {
 });
 
 function retrieveProjects(localStorage) {
-  console.log("retrieving from storage");
-  let parsed = JSON.parse(localStorage);
-  console.log("parsed from storage: " + parsed[0].projectName);
+  let parsedProjects = JSON.parse(localStorage);
   let newProjects = [];
-  parsed.forEach((project) =>{
-    let newProject = createProject(project.projectName);
-    let todos = project.todos;
-    for (let i = 0; i < todos.length; i++) {
-      let todo = todos[i];
-      project.todos[i] = createTodo({title: todo.title, description: todo.description, dueDate: todo.dueDate, priority: todo.priority});
+  for (let i = 0; i < parsedProjects.length; i++) {
+    let newProject = createProject(parsedProjects[i].projectName);
+    let todos = parsedProjects[i].todos;
+    for (let j = 0; j < todos.length; j++) {
+      let todo = todos[j];
+      todos[j] = createTodo(todo.title, todo.description, todo.dueDate, todo.priority);
     }
     newProject.todos = todos;
     newProjects.push(newProject);
-  });
+  };
   return newProjects;
 }
