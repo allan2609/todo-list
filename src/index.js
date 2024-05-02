@@ -87,7 +87,9 @@ function showTodos() {
   while (todoList.hasChildNodes()) {
     todoList.removeChild(todoList.firstChild);
   }
+  document.querySelector(".new-todo").disabled = true;
   if (projects.length > 0) {
+    document.querySelector(".new-todo").disabled = false;
     for (let i = 0; i < projects[activeProject].todos.length; i++) {
       const item = document.createElement("span");
       item.className = "todo-item";
