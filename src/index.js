@@ -227,6 +227,8 @@ document.querySelector(".close-todo-dialog").addEventListener("click", () => {
 });
 
 document.querySelector(".close-edit-todo-dialog").addEventListener("click", () => {
+  document.querySelector("#edit-title").classList.remove("invalid");
+  document.querySelector("#edit-description").classList.remove("invalid");
   editTodoDialog.close();
 });
 
