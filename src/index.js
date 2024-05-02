@@ -4,7 +4,7 @@ import Project from "./project.js";
 import createProject from "./createProject.js";
 import "./styles.css";
 
-const projects = [
+const projects = localStorage["projects"] ? retrieveProjects(localStorage["projects"]) : [
   new Project("Sample project"),
 ];
 
