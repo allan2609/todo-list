@@ -1,3 +1,4 @@
+const { lightFormat } = require("date-fns");
 import createTodo from "./createTodo.js";
 import Project from "./project.js";
 import createProject from "./createProject.js";
@@ -117,7 +118,11 @@ function showTodos() {
       
       const date = document.createElement("div");
       date.className = "date";
-      date.textContent = projects[activeProject].todos[i].dueDate;
+      if (projects[activeProject].todos[i].dueDate != "") {
+        const dateValue = projects[activeProject].todos[i].dueDate;
+        const dateFormatted = lightFormat(dateValue, "dd.MM.yyyy");
+        date.textContent = dateFormatted;
+      }
       
       if (projects[activeProject].todos[i].priority == "low") {
         item.classList.add("low-priority");
@@ -160,7 +165,6 @@ function editTodo(event) {
   editTodoDialog.showModal();
 
   document.querySelector(".update-todo").addEventListener("click", function() {
-    console.log("update button clicked")
     updateTodo(index);
     const oldButton = document.querySelector(".update-todo")
     const newButton = oldButton.cloneNode(true);
@@ -169,7 +173,6 @@ function editTodo(event) {
 }
 
 function updateTodo(todo) {
-  console.log("updating todo")
   if (validateEditForm()) {
     projects[activeProject].todos[todo].title = document.querySelector("#edit-title").value;
     projects[activeProject].todos[todo].description = document.querySelector("#edit-description").value;
