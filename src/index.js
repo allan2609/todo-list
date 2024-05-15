@@ -164,11 +164,12 @@ function editTodo(event) {
   
   editTodoDialog.showModal();
 
-  document.querySelector(".update-todo").addEventListener("click", function() {
+  const updateButton = document.querySelector(".update-todo");
+  const clonedButton = updateButton.cloneNode(true);
+  updateButton.parentNode.replaceChild(clonedButton, updateButton);
+
+  clonedButton.addEventListener("click", function() {
     updateTodo(index);
-    const oldButton = document.querySelector(".update-todo")
-    const newButton = oldButton.cloneNode(true);
-    oldButton.parentNode.replaceChild(newButton, oldButton); //without this eventlistener starts running multiple times!?
   });
 }
 
